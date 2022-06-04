@@ -20,7 +20,7 @@ class Sprites {
 
         //阴影 默认为T
         this.shadow = new Image();
-        this.usingShadow = this.gameObject.usingShadow || true;
+        this.usingShadow = this.gameObject.usingShadow || false;
         if (this.usingShadow) this.shadow.src = './images/characters/shadow.png';
 
         this.shadow.onload = () => {
