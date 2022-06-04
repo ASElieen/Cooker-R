@@ -15,13 +15,30 @@ class Sprites {
         this.currentAnimation = config.currentAnimation || 'idleDown';
         this.currentAnimationFrame = 0;
 
-        //挂给gameObject
+        //和GameObject挂钩
         this.gameObject = config.gameObject
+
+        //阴影 默认为T
+        this.shadow = new Image();
+        this.usingShadow = this.gameObject.usingShadow || true;
+        if (this.usingShadow) this.shadow.src = './images/characters/shadow.png';
+
+        this.shadow.onload = () => {
+            this.isShadowLoaded = true;
+        }
     }
 
     draw(ctx) {
         const x = this.gameObject.x * 16 - 8;
         const y = this.gameObject.y * 16 - 18;
+
+        this.isShadowLoaded && this.usingShadow && ctx.drawImage(
+            this.shadow,
+            0, 0,
+            32, 32,
+            x, y,
+            32, 32
+        )
 
         this.isLoaded && ctx.drawImage(
             this.img,

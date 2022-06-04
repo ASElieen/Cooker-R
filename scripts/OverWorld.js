@@ -18,7 +18,7 @@ class OverWorld {
 
         const hero = new GameObject({
             x: 5,
-            y: 6
+            y: 6,
         })
 
         const npc1 = new GameObject({
