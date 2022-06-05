@@ -15,6 +15,7 @@ class Person extends GameObject {
 
     update(state) {
         this.updatePosition();
+        this.updateSprite(state);
         if (this.isPlayer && this.movingProgressRemaining === 0 && state.arrow) {
             this.direction = state.arrow;
             this.movingProgressRemaining = 16;
@@ -28,6 +29,13 @@ class Person extends GameObject {
             //对应的x或者y值+-1 同时移动余量-1
             this[property] += change;
             this.movingProgressRemaining -= 1;
+        }
+    }
+
+    updateSprite(state) {
+        this.sprites.setAnimation('idle-' + this.direction);
+        if (this.movingProgressRemaining > 0) {
+            this.sprites.setAnimation('walk-' + this.direction);
         }
     }
 }
