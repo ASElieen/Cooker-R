@@ -45,10 +45,14 @@ class Sprites {
                 [0, 2]
             ],
         }
-        this.currentAnimation = config.currentAnimation || 'idle-down';
-        this.currentAnimationFrame = 0;
 
+        //当前移动方向对应的动画组
+        this.currentAnimation = config.currentAnimation || 'idle-down';
+        //当前帧
+        this.currentAnimationFrame = 0;
+        //帧数限制 因为之前移动是一次16 这个和移动对应 越小每一步的动作就越多
         this.animationsFrameLimit = config.animationFrameLimit || 16;
+        //动画帧进度
         this.animationFrameProgress = this.animationsFrameLimit;
 
         //和GameObject挂钩
@@ -69,6 +73,7 @@ class Sprites {
         return this.animations[this.currentAnimation][this.currentAnimationFrame]
     }
 
+    //设置当前对应按键动画
     setAnimation(key) {
         if (this.currentAnimation !== key) {
             this.currentAnimation = key;
@@ -78,6 +83,7 @@ class Sprites {
 
     }
 
+    //控制动画进度
     updateAnimationProgress() {
         if (this.animationFrameProgress > 0) {
             this.animationFrameProgress -= 1;
@@ -91,9 +97,9 @@ class Sprites {
         }
     }
 
-    draw(ctx) {
-        const x = this.gameObject.x - 8;
-        const y = this.gameObject.y - 18;
+    draw(ctx, cameraPerson) {
+        const x = this.gameObject.x - 8 + utils.withGrid(10.5) - cameraPerson.x;
+        const y = this.gameObject.y - 18 + utils.withGrid(6) - cameraPerson.y;
 
         const [frameX, frameY] = this.frame;
 

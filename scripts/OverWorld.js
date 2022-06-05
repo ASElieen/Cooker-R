@@ -14,18 +14,23 @@ class OverWorld {
     startGameLoop() {
         const step = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.map.drawLowerImage(this.ctx);
 
+            //视角跟随
+            const cameraPerson = this.map.gameObject.hero
             Object.values(this.map.gameObject).forEach(obj => {
                 obj.update({
                     arrow: this.directionInput.direction //get
                 })
+            });
 
+            this.map.drawLowerImage(this.ctx, cameraPerson);
+
+            Object.values(this.map.gameObject).forEach(obj => {
                 //拿到人物的new GameObject对象 然后通过sprites转入Sprites中调用draw
-                obj.sprites.draw(this.ctx);
+                obj.sprites.draw(this.ctx, cameraPerson);
             })
 
-            this.map.drawUpperImage(this.ctx);
+            this.map.drawUpperImage(this.ctx, cameraPerson);
             requestAnimationFrame(() => {
                 step();
             })

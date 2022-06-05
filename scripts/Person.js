@@ -32,8 +32,11 @@ class Person extends GameObject {
         }
     }
 
+    //更新对应动画
     updateSprite(state) {
-        this.sprites.setAnimation('idle-' + this.direction);
+        if (this.isPlayer && this.movingProgressRemaining === 0 && !state.arrow) {
+            this.sprites.setAnimation('idle-' + this.direction);
+        }
         if (this.movingProgressRemaining > 0) {
             this.sprites.setAnimation('walk-' + this.direction);
         }
