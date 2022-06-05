@@ -18,7 +18,7 @@ class Sprites {
         //和GameObject挂钩
         this.gameObject = config.gameObject
 
-        //阴影 默认为T
+        //阴影 默认为F
         this.shadow = new Image();
         this.usingShadow = this.gameObject.usingShadow || false;
         if (this.usingShadow) this.shadow.src = './images/characters/shadow.png';
@@ -29,8 +29,8 @@ class Sprites {
     }
 
     draw(ctx) {
-        const x = this.gameObject.x * 16 - 8;
-        const y = this.gameObject.y * 16 - 18;
+        const x = this.gameObject.x - 8;
+        const y = this.gameObject.y - 18;
 
         this.isShadowLoaded && this.usingShadow && ctx.drawImage(
             this.shadow,
