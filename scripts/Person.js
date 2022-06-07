@@ -13,23 +13,38 @@ class Person extends GameObject {
         }
     }
 
+    //OverWorld调用
     update(state) {
-        this.updatePosition();
+        if (this.movingProgressRemaining > 0) {
+            this.updatePosition();
+        } else {
+            if (this.isPlayer && state.arrow) {
+                this.startBehavior(state, {
+                    type: 'walk',
+                    direction: state.arrow
+                })
+            }
+        }
         this.updateSprite(state);
-        if (this.isPlayer && this.movingProgressRemaining === 0 && state.arrow) {
-            this.direction = state.arrow;
+    }
+
+    startBehavior(state, behavior) {
+        this.direction = behavior.direction;
+        if (behavior.type === 'walk') {
+            if (state.map.isSpaceTaken(this.x, this.y, this.direction)) return;
+
+            //防止把人物初始占位视为墙体
+            state.map.moveWall(this.x, this.y, this.direction)
             this.movingProgressRemaining = 16;
         }
     }
 
     updatePosition() {
-        if (this.movingProgressRemaining > 0) {
-            //从GameObject拿到this.direction 
-            const [property, change] = this.directionUpdate[this.direction];
-            //对应的x或者y值+-1 同时移动余量-1
-            this[property] += change;
-            this.movingProgressRemaining -= 1;
-        }
+        //从GameObject拿到this.direction 
+        const [property, change] = this.directionUpdate[this.direction];
+        //对应的x或者y值+-1 同时移动余量-1
+        this[property] += change;
+        this.movingProgressRemaining -= 1;
     }
 
     //更新对应动画

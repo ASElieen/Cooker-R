@@ -2,6 +2,9 @@ class OverWorldMap {
     constructor(config) {
         this.gameObject = config.gameObject;
 
+        //墙体碰撞
+        this.walls = config.walls || {};
+
         this.lowerImage = new Image();
         this.lowerImage.src = config.lowerImageSrc;
 
@@ -18,6 +21,37 @@ class OverWorldMap {
         ctx.drawImage(this.upperImage,
             utils.withGrid(10.5) - cameraPerson.x,
             utils.withGrid(6) - cameraPerson.y)
+    }
+
+    //碰撞部分
+    //如果有墙则返回T
+    isSpaceTaken(currentX, currentY, direction) {
+        const { x, y } = utils.nextPosition(currentX, currentY, direction);
+        return this.walls[`${x},${y}`] || false;
+    }
+
+    //地图挂载
+    mountObjects() {
+        Object.values(this.gameObject).forEach(obj => {
+            obj.mount(this)
+        })
+    }
+
+    //-----------人物的占位碰撞部分------------------------
+    //把人物当前位置视作墙体 移动后删除原来位置的墙体并添加新的碰撞
+    addWall(x, y) {
+        this.walls[`${x},${y}`] = true;
+    }
+
+    removeWall(x, y) {
+        delete this.walls[`${x},${y}`]
+    }
+
+    //人物移动后移走原来占位
+    moveWall(wasX, wasY, direction) {
+        this.removeWall(wasX, wasY);
+        const { x, y } = utils.nextPosition(wasX, wasY, direction);
+        this.addWall(x, y)
     }
 }
 
@@ -38,6 +72,12 @@ window.OverWorldMaps = {
                 usingShadow: true,
                 src: './images/characters/people/npc1.png'
             })
+        },
+        walls: {
+            [utils.asGridCoord(7, 6)]: true,
+            [utils.asGridCoord(8, 6)]: true,
+            [utils.asGridCoord(7, 7)]: true,
+            [utils.asGridCoord(8, 7)]: true
         }
     },
     Kitchen: {
